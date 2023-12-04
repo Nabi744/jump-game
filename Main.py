@@ -138,6 +138,6 @@ while player.player_stage < 30:
     pygame.display.flip()
 
     # Cap the frame rate
-    clock.tick(60)
+    clock.tick(240)
 
 game_over(screen, username=username)

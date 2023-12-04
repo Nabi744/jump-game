@@ -45,9 +45,9 @@ class Player(pygame.sprite.Sprite):
         self.rect.height = 40 #FIXME
         self.speed = 0
         self.angle = 0
-        self.move_speed = 2.4
-        self.max_speed = 15
-        self.gravity = 1
+        self.move_speed = 2.4/3.6
+        self.max_speed = 15/4
+        self.gravity = 1/10
         self.player_stage = 0
         self.lamp = Lamp(self)
         self.state = "STOP"
@@ -143,13 +143,16 @@ class Player(pygame.sprite.Sprite):
         self.player_stage -= 1
         grid.grid = grid.grid_list[self.player_stage]
         self.lamp.decrement()
-        self.rect.y = self.size
+        self.rect.y = -self.size
 
     def check_level(self,screen_height, grid: Grid, vine_group: pygame.sprite.Group):
-        if (self.rect.y <= 0 and math.cos(self.angle)>=0 and self.player_stage<29):
-            self.introduce_new_stage(grid=grid, vine_group=vine_group)
-        elif self.rect.y+self.rect.height>=screen_height and math.cos(self.angle)<= 0 and self.player_stage>0:
+        if self.rect.y+self.rect.height>screen_height and math.cos(self.angle)<= 0 and self.player_stage>0:
             self.fall_to_previous_stage(grid=grid)
+            return
+        if (math.cos(self.angle)>=0 and self.rect.y <= 0 and  self.player_stage<29):
+            self.introduce_new_stage(grid=grid, vine_group=vine_group)
+            return
+
     def move_left(self):
         self.angle=-math.pi/2
         self.speed=self.move_speed
@@ -177,7 +180,7 @@ class Player(pygame.sprite.Sprite):
         """
         This applies gravity. Note that the form of gravitational motion is discrete.
         """
-        self.angle,self.speed=vec_add(self.angle, self.speed,math.pi,0.27)
+        self.angle,self.speed=vec_add(self.angle, self.speed,math.pi,0.27*self.gravity)
 
     def convert_state_to_run(self) -> None:
         # You cannot change state when charging otherwise than jumping.
@@ -190,7 +193,12 @@ class Player(pygame.sprite.Sprite):
         if not self.state.startswith("JUMP"):
             input_result: str = verbose_keys(keys=keys)
             if input_result.startswith("UP"):
-                self.state = "CHARGE_" + self.state.split("_")[-1]
+                if keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT]:
+                    self.state = "CHARGE_LEFT"
+                elif keys[pygame.K_RIGHT] and not keys[pygame.K_LEFT]:
+                    self.state = "CHARGE_RIGHT"
+                else:
+                    self.state = "CHARGE_" + self.state.split("_")[-1]
                 self.jump_strength += 1
                 if self.jump_strength > 30:
                     self.state = "JUMP_" + self.state.split("_")[-1]
@@ -209,7 +217,7 @@ class Player(pygame.sprite.Sprite):
                         self.jump_stop()
                         self.jump_strength = 0
                         self.state = "STOP"
-            elif input_result == "DEFAULT" and self.state.startswith("CHARGE"):
+            elif (input_result == "DEFAULT" or input_result == "CHARGE_"+self.state) and self.state.startswith("CHARGE"):
                 # We need to jump here
                 self.state = "JUMP_" + self.state.split("_")[-1]
                 jump_sound = pygame.mixer.Sound("audio/jump.mp3")
@@ -237,7 +245,6 @@ class Player(pygame.sprite.Sprite):
                 self.state = "STOP"
 
         # Update image
-        print(self.state)
         self.image = pygame.transform.scale(
             select_image(self.state),
             (self.size, self.size),
