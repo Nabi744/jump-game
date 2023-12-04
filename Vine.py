@@ -49,7 +49,6 @@ class VineGroup(pygame.sprite.Group):
             return
         vine_y_start = player.rect.y
         vine_x = player.rect.x
-        self.vine_active=True
         for vine_y in range(vine_y_start, 40, -30):
             vine = Vine(vine_x, vine_y)
             self.add(vine)
@@ -57,3 +56,5 @@ class VineGroup(pygame.sprite.Group):
         for vine_x in range(0, 800, 50):
             vine = Vine(vine_x, 70)
             self.add(vine)
+
+        self.vine_active=True
