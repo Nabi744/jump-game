@@ -195,10 +195,18 @@ class Player(pygame.sprite.Sprite):
             if input_result.startswith("UP"):
                 if keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT]:
                     self.state = "CHARGE_LEFT"
+                    self.image_state=(3,0)
                 elif keys[pygame.K_RIGHT] and not keys[pygame.K_LEFT]:
                     self.state = "CHARGE_RIGHT"
+                    self.image_state=(3,1)
                 else:
                     self.state = "CHARGE_" + self.state.split("_")[-1]
+                    if self.state == "CHARGE_LEFT":
+                        self.image_state=(3,0)
+                    elif self.state == "CHARGE_RIGHT":
+                        self.image_state=(3,1)
+                    else:
+                        self.image_state=(3,2)
                 self.jump_strength += 1
                 if self.jump_strength > 30:
                     self.state = "JUMP_" + self.state.split("_")[-1]
@@ -208,14 +216,17 @@ class Player(pygame.sprite.Sprite):
                     if self.state == "JUMP_LEFT":
                         self.jump_left()
                         self.jump_strength = 0
+                        self.image_state=(2,0)
                         self.state = "STOP"
                     elif self.state == "JUMP_RIGHT":
                         self.jump_right()
                         self.jump_strength = 0
+                        self.image_state=(2,1)
                         self.state = "STOP"
                     elif self.state == "JUMP_STOP":
                         self.jump_stop()
                         self.jump_strength = 0
+                        self.image_state=(2,2)
                         self.state = "STOP"
             elif (input_result == "DEFAULT" or input_result == "CHARGE_"+self.state) and self.state.startswith("CHARGE"):
                 # We need to jump here
@@ -227,26 +238,32 @@ class Player(pygame.sprite.Sprite):
                     self.jump_left()
                     self.jump_strength = 0
                     self.state = "STOP"
+                    self.image_state=(2,0)
                 elif self.state == "JUMP_RIGHT":
                     self.jump_right()
                     self.jump_strength = 0
                     self.state = "STOP"
+                    self.image_state=(2,1)
                 elif self.state == "JUMP_STOP":
                     self.jump_stop()
                     self.jump_strength = 0
                     self.state = "STOP"
+                    self.image_state=(2,2)
             elif input_result == "LEFT":
                 self.state = "RUN_LEFT"
                 self.move_left()
+                self.image_state=(1,0)
             elif input_result == "RIGHT":
                 self.state = "RUN_RIGHT"
                 self.move_right()
+                self.image_state = (1,1)
             else:
                 self.state = "STOP"
+                self.image_state = (0, 0)
 
         # Update image
         self.image = pygame.transform.scale(
-            select_image(self.state),
+            select_image(self.image_state),
             (self.size, self.size),
         )
 
