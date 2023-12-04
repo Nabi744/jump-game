@@ -33,7 +33,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, screen_width, screen_height):
         super().__init__()
         self.size = 50
-        original_image = select_image("STOP")
+        original_image = select_image((0,0))
         self.image = pygame.transform.scale(
             original_image,
             (self.size, self.size),

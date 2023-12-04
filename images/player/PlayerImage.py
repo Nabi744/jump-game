@@ -11,7 +11,7 @@ def select_image(image_state) -> pygame.Surface:
     image_1_1_1 = pygame.transform.flip(image_1_0_1, True, False)#walk_right1
     image_1_1_2 = pygame.transform.flip(image_1_0_2, True, False)#walk_right2
     image_2_0 = pygame.image.load("images/player/Jump 0.png").convert_alpha()#jump_left
-    image_2_1 = pygame.transform.flip(image_2_1, True, False)#jump_right
+    image_2_1 = pygame.transform.flip(image_2_0, True, False)#jump_right
     image_2_2 = pygame.image.load("images/player/Jump 2.png").convert_alpha()#jump_stop
     image_3_0 = pygame.image.load("images/player/Charge 0.png").convert_alpha()#charge_left
     image_3_1 = pygame.transform.flip(image_3_0, True, False)#charge_right
@@ -24,7 +24,7 @@ def select_image(image_state) -> pygame.Surface:
             return eval(f"image_1_{image_state[1]}_1")
         else:
             return eval(f"image_1_{image_state[1]}_2")
-    elif image_stage[0]==4:
+    elif image_state[0]==4:
         if time.time() % 0.25 > 0.125:
             return eval(f"image_4_{0}")
         else:
