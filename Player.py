@@ -85,6 +85,7 @@ class Player(pygame.sprite.Sprite):
             self.rect.y=self.collide_vine.rect.y-self.rect.height
             self.speed=0
             self.angle=0
+            return
         #grid collision
         if not grid.movable_left(self):
             self.collide_left=True
@@ -247,7 +248,7 @@ class Player(pygame.sprite.Sprite):
         def draw_player_stage(self: Player):
             player_font = FLOOR_FONT
             player_stage_text = "Stage " + str(self.player_stage + 1)
-            rendered_text = player_font.render(player_stage_text, True, BLUE
+            rendered_text = player_font.render(player_stage_text, True, BLUE)
             screen.blit(rendered_text, (50, 50))
 
         self.lamp.update_lamp_position(self)
