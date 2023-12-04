@@ -146,9 +146,9 @@ class Player(pygame.sprite.Sprite):
         self.rect.y = self.size
 
     def check_level(self,screen_height, grid: Grid, vine_group: pygame.sprite.Group):
-        if (self.rect.y < 0 and self.player_stage<29):
+        if (self.rect.y <= 0 and math.cos(self.angle)>=0 and self.player_stage<29):
             self.introduce_new_stage(grid=grid, vine_group=vine_group)
-        if self.rect.y > screen_height and self.player_stage>0:
+        elif self.rect.y+self.rect.height>=screen_height and math.cos(self.angle)<= 0 and self.player_stage>0:
             self.fall_to_previous_stage(grid=grid)
     def move_left(self):
         self.angle=-math.pi/2
