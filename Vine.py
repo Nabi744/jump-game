@@ -13,8 +13,10 @@ class Vine(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(
             original_image,
             (
-                int(original_image.get_width() * SCALING),
-                int(original_image.get_height() * SCALING),
+                50,
+                50,
+                # int(original_image.get_width() * SCALING),
+                # int(original_image.get_height() * SCALING),
             ),
         )
         self.rect = self.image.get_rect()
@@ -43,18 +45,14 @@ class VineGroup(pygame.sprite.Group):
         vine_y = screen_height - 10 if self.is_empty() else (self.sprites()[0].rect.top + y) // 2
         vine = Vine(vine_x, vine_y)
         return vine
-    
+
     def make_vine_to_top(self, player: Player):
-        if self.is_empty():
-            return
-        vine_y_start = player.rect.y
-        vine_x = player.rect.x
-        for vine_y in range(vine_y_start, 40, -30):
-            vine = Vine(vine_x, vine_y)
-            self.add(vine)
-        
-        for vine_x in range(0, 800, 50):
-            vine = Vine(vine_x, 70)
-            self.add(vine)
 
         self.vine_active=True
+        if self.is_empty():
+            return
+        for vine_x in range(0, 800, 50):
+            for vine_y in range(600-50,0,-50):
+                vine=Vine(vine_x,vine_y)
+                self.add(vine)
+
