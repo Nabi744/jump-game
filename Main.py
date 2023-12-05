@@ -56,8 +56,10 @@ class Game():
             block_size=block_size,
             stage=user.points // 100 if user.points > 0 else 0,
         )
-
-        vine_group = background.vine_group_list[player.player_stage]
+        if player.player_stage!=30:
+            vine_group = background.vine_group_list[player.player_stage]
+        else:
+            game_over(screen,username=username)
 
         # Vine should be created after 5 seconds
         elapsed_time_after_stage = pygame.time.get_ticks()
@@ -71,8 +73,8 @@ class Game():
         exit_text_rect = exit_text.get_rect(center=exit_button.center)
         return_text_rect = return_text.get_rect(center=return_button.center)
         exit_status = False
-
-        while player.player_stage < 30:
+        run=True
+        while run:
             screen.fill(WHITE)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -104,6 +106,8 @@ class Game():
 
             # Move player
             player.update(screen_height, grid=background, vine_group=vine_group, keys=keys)
+            if player.player_stage == 30:
+                game_over(screen, username)
 
             hope_gauge.increment()
             hope_used = hope_gauge.use_hope(
@@ -141,7 +145,6 @@ class Game():
             # Cap the frame rate
             clock.tick(240)
 
-        game_over(screen, username=username)
 
 if __name__ == "__main__":
     game = Game()

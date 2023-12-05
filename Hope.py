@@ -52,7 +52,7 @@ class Hope:
         """
 
         current_time = pygame.time.get_ticks()
-        if current_time - self.last_incremented_time < 400:
+        if current_time - self.last_incremented_time < 500:
             return
 
         if self.value < self.max_value:
