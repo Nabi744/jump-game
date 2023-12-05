@@ -121,8 +121,13 @@ class Player(pygame.sprite.Sprite):
             self.collide_down=True
             self.control=True
     def motion(self):#move
+        """
+        This moves the player.
+        """
+        #speed limit
         if self.speed>self.max_speed:
             self.speed=self.max_speed
+        #move
         self.rect.x += self.speed * math.sin(self.angle)
         self.rect.y -= self.speed * math.cos(self.angle)
 

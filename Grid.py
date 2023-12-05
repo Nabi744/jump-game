@@ -41,6 +41,7 @@ class Grid:
         BRICK_IMAGE = scaled_image("BRICK")
         EMPTY_IMAGE = scaled_image("EMPTY")
         start_time = time.time()
+        # csv 파일 읽기
         with open("images/map/map_all.csv", newline="") as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=",")
             row_cnt, col_cnt = 0, 0

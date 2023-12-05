@@ -21,15 +21,18 @@ def display_leaderboard(screen: pygame.Surface) -> None:
     users_list = get_sorted_users()
     text_y = 50
 
+    # Leaderboard
     for i, user in enumerate(users_list[:10], start = 1):
         text = f"{i}. {user.name}: {user.points} points"
         rendered_text = font.render(text, True, WHITE)
         screen.blit(rendered_text, (50, text_y))
         text_y += 40
 
+    # Press Enter to continue
     text_enter=font.render("Press Enter to continue", True, WHITE)
     screen.blit(text_enter, (400, 500))
 
+    # Display
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
