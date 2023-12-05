@@ -3,6 +3,11 @@ import time
 
 
 def select_image(image_state) -> pygame.Surface:
+    """
+    This function selects the image based on the image_state.
+    :param image_state:
+    :return:
+    """
     image_0_0 = pygame.image.load("images/player/Basic 0.png").convert_alpha()#stop_left
     image_0_1 = pygame.transform.flip(image_0_0, True, False)#stop_right
     image_0_2 = pygame.image.load("images/player/Basic 2.png").convert_alpha()#stop_stop

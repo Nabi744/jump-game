@@ -22,7 +22,6 @@ def verbose_keys(keys) -> str:
         return "RIGHT"
     return "DEFAULT"
 
-
 def vec_add(angle1, length1, angle2, length2):
     """
     This function adds two vectors and returns the angle and length of the resultant vector.
@@ -329,6 +328,11 @@ class Player(pygame.sprite.Sprite):
 
 
     def draw_player_and_lamp(self, screen=pygame.Surface):
+        """
+        This draws the player and the lamp.
+        :param screen:
+        :return:
+        """
         def draw_player_stage(self: Player):
             player_font = FLOOR_FONT
             player_stage_text = "Stage " + str(self.player_stage + 1)

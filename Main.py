@@ -38,9 +38,9 @@ class Game():
             screen.fill(BLACK)
             intro_image.set_alpha(i)
             screen.blit(intro_image,(0, 0))
-
             pygame.display.update()
             time.sleep(0.007)
+        #효과음
         beep=pygame.mixer.Sound("audio/um.mp3")
         beep.play()
 
@@ -84,6 +84,8 @@ class Game():
         exit_text_rect = exit_text.get_rect(center=exit_button.center)
         return_text_rect = return_text.get_rect(center=return_button.center)
         exit_status = False
+
+        # Main game loop
         run=True
         while run:
             screen.fill(WHITE)
@@ -105,7 +107,7 @@ class Game():
             if keys[pygame.K_ESCAPE]:
                 print("ESCAPE PRESSED")
                 exit_status = True
-
+            # Exit screen
             if exit_status:
                 screen.fill(BLACK)
                 pygame.draw.rect(screen, BLACK, exit_button)
@@ -120,6 +122,7 @@ class Game():
             if player.player_stage == 30:
                 game_over(screen, username)
 
+            # Increment hope gauge
             hope_gauge.increment()
             hope_used = hope_gauge.use_hope(
                 keys, vine_group=vine_group, player=player, grid=background
@@ -131,10 +134,10 @@ class Game():
             # Draw Grid
             background.draw_grid(screen=screen)
 
+            # Draw vines
             if current_stage != player.player_stage:
                 current_stage = player.player_stage
                 elapsed_time_after_stage = pygame.time.get_ticks()
-
 
             vine_group = background.vine_group_list[player.player_stage]
             current_time = pygame.time.get_ticks()

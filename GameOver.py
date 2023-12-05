@@ -8,13 +8,16 @@ def game_over(screen, username: str):
     """
     Returns Game over status
     """
-
     font = USERNAME_FONT
-    game_over_text = font.render("You Broke All The Stages!!", True, BLUE)
-    game_over_rect = game_over_text.get_rect(center=(400, 210))
-    exit_button = pygame.Rect(0, 400, 800, 50)
+    game_over_text = font.render("The End!", True, BLUE)
+    game_over_rect = game_over_text.get_rect(center=(700, 70))
+    exit_button = pygame.Rect((630,550), (100, 50))
     exit_text = font.render("Exit", True, RED)
     exit_rect = exit_text.get_rect(center=exit_button.center)
+    # poem_sound=pygame.mixer.Sound("audio/poem.wav")
+    # poem_sound.play()
+    poem_image=pygame.image.load("images/poem.jpg").convert_alpha()
+    poem_image=pygame.transform.scale(poem_image,(450,600))
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -26,8 +29,8 @@ def game_over(screen, username: str):
                     get_or_create_user(username, 3000)
                     pygame.quit()
                     sys.exit()
-
         screen.fill(BLACK)
+        screen.blit(poem_image,(175,0))
         screen.blit(game_over_text, game_over_rect)
         screen.blit(exit_text, exit_rect)
         
