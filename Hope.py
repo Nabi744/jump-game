@@ -32,19 +32,21 @@ class Hope:
     This class represents the hope gauge and its design features.
     """
     def __init__(self, screen_width, screen_height):
-        self.value = 0
+        self.value = 100
         self.max_value = 100
         self.width = screen_width - 20
         self.height = 20
         self.increasing = True
         self.rect = pygame.Rect(10, 10, self.width, self.height)
-        self.hope_rect = pygame.Rect(10, 10, 0, self.height)
+        self.hope_rect = pygame.Rect(
+            10, 10, round(self.width * (self.value / 100)), self.height
+        )
         self.color = GREEN
         self.last_incremented_time = pygame.time.get_ticks()
 
     def increment(self):
         """
-        The hope gauge should increment every 0.5 seconds. To implement this, 
+        The hope gauge should increment every 0.5 seconds. To implement this,
         we use the milliseconds time method via the pygame module and compare it
         with the last incremented time. If the gauge is full, we need not increment.
         """

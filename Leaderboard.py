@@ -22,7 +22,7 @@ def display_leaderboard(screen: pygame.Surface) -> None:
     users_list = get_sorted_users()
     text_y = 50
 
-    for i, user in enumerate(users_list[:5], start = 1):
+    for i, user in enumerate(users_list[:10], start = 1):
         text = f"{i}. {user.name}: {user.points} points"
         rendered_text = font.render(text, True, WHITE)
         screen.blit(rendered_text, (50, text_y))
