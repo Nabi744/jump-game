@@ -152,6 +152,9 @@ class Player(pygame.sprite.Sprite):
         if (math.cos(self.angle)>=0 and self.rect.y <= 0 and  self.player_stage<29):
             self.introduce_new_stage(grid=grid, vine_group=vine_group)
             return
+        elif math.cos(self.angle)>=0 and self.rect.y <= 0 and  self.player_stage==29:
+            self.player_stage+=1
+            return
 
     def move_left(self):
         self.angle=-math.pi/2
