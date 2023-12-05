@@ -21,12 +21,12 @@ def game_over(screen, username: str):
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                get_or_create_user(username, 3000)
+                get_or_create_user(username, 2100)
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if exit_button.collidepoint(event.pos):
-                    get_or_create_user(username, 3000)
+                    get_or_create_user(username, 2100)
                     pygame.quit()
                     sys.exit()
         screen.fill(BLACK)

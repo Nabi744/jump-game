@@ -51,8 +51,8 @@ class Player(pygame.sprite.Sprite):
             (30, 40),
         )
         self.rect = self.image.get_rect()
-        self.rect.x = 51
-        self.rect.y = 500
+        self.rect.x = 0
+        self.rect.y = -40
         self.rect.width = 30
         self.rect.height = 40
         self.speed = 0

@@ -56,7 +56,7 @@ class Game():
 
         # Create needed instances
         player = Player(screen_width, screen_height)
-        player.player_stage = user.points // 100 if user.points > 0 else 0
+        player.player_stage = user.points // 100 -1 if user.points > 0 else 0
         hope_gauge = Hope(screen_width=screen_width, screen_height=screen_height)
 
         # Create Grid
@@ -65,7 +65,7 @@ class Game():
         background = Grid(
             grid_size=grid_size,
             block_size=block_size,
-            stage=user.points // 100 if user.points > 0 else 0,
+            stage=user.points // 100 - 1 if user.points > 0 else 0,
         )
         if player.player_stage!=20:
             vine_group = background.vine_group_list[player.player_stage]
