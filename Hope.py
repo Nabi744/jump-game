@@ -32,7 +32,7 @@ class Hope:
     This class represents the hope gauge and its design features.
     """
     def __init__(self, screen_width, screen_height):
-        self.value = 100
+        self.value = 0
         self.max_value = 100
         self.width = screen_width - 20
         self.height = 20

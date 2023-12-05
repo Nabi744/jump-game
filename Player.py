@@ -1,6 +1,7 @@
 import pygame
 import math
 import random
+import time
 from Colors import BLUE
 
 from Grid import Grid
@@ -106,6 +107,9 @@ class Player(pygame.sprite.Sprite):
             if self.image_state[0]!=3 and self.image_state[0]!=2:
                 self.speed=0
                 self.angle=0
+            bush_sound = pygame.mixer.Sound("audio/bush.mp3")
+            bush_sound.set_volume(0.9)
+            bush_sound.play()
             return
         #grid collision
         if not grid.movable_left(self):
