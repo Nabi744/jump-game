@@ -1,7 +1,6 @@
 import pygame
 
 
-
 class Block(pygame.sprite.Sprite):
     def __init__(self, type: str, image: pygame.Surface, row: int, col: int):
         super().__init__()
