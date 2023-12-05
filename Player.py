@@ -106,6 +106,9 @@ class Player(pygame.sprite.Sprite):
             if self.image_state[0]!=3 and self.image_state[0]!=2:
                 self.speed=0
                 self.angle=0
+            collide_sound = pygame.mixer.Sound("audio/um.mp3")
+            collide_sound.set_volume(0.1)
+            collide_sound.play()
             return
         #grid collision
         if not grid.movable_left(self):

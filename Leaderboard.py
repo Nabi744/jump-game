@@ -5,7 +5,6 @@ from Colors import BLACK, WHITE
 from User import *
 from fonts.Font import LEADERBOARD_FONT
 
-
 def get_sorted_users() -> list[User]:
     """
     This retrieves the users from pickled data and returns it in a form of a sorted list
@@ -30,7 +29,7 @@ def display_leaderboard(screen: pygame.Surface) -> None:
 
     text_enter=font.render("Press Enter to continue", True, WHITE)
     screen.blit(text_enter, (400, 500))
-    
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

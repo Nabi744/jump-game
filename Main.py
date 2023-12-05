@@ -26,12 +26,12 @@ class Game():
         pygame.display.set_caption("Jack & Ivy")
         pygame.display.set_icon(pygame.image.load("images/logo.ico"))
 
-
-        # FIXME: Fix the audio to desired.
+        #bgm
         pygame.mixer.music.load("audio/About Our Journey.mp3")
         pygame.mixer.music.set_volume(0.5)
         pygame.mixer.music.play(loops=-1)
 
+        #intro fade_in
         intro_image=pygame.image.load("images/logo.png").convert_alpha()
         intro_image=pygame.transform.scale(intro_image, (800, 600))
         for i in range(255,0,-1):
@@ -41,12 +41,16 @@ class Game():
 
             pygame.display.update()
             time.sleep(0.007)
+        beep=pygame.mixer.Sound("audio/um.mp3")
+        beep.play()
+
 
         # Set Username and display leaderboard
         username = input_username(screen=screen)
         user = get_or_create_user(name=username)
+        beep.play()
         display_leaderboard(screen=screen)
-
+        beep.play()
         # Initialize clock
         clock = pygame.time.Clock()
 
