@@ -47,7 +47,6 @@ class VineGroup(pygame.sprite.Group):
         return vine
 
     def make_vine_to_top(self, player: Player):
-
         self.vine_active=True
         if self.is_empty():
             return

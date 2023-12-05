@@ -49,8 +49,8 @@ class Game():
         hope_gauge = Hope(screen_width=screen_width, screen_height=screen_height)
 
         # Create Grid
-        grid_size = (screen_height // player.size, screen_width // player.size)
-        block_size = player.size
+        grid_size = (screen_height // 50, screen_width // 50)
+        block_size = 50
         background = Grid(
             grid_size=grid_size,
             block_size=block_size,
@@ -127,7 +127,7 @@ class Game():
 
             vine_group = background.vine_group_list[player.player_stage]
             current_time = pygame.time.get_ticks()
-            vine_group.insert_vine(player.rect.x, player.rect.y, player.size, screen_height)
+            vine_group.insert_vine(player.rect.x, player.rect.y, 40, screen_height)
             vine_group.update()
             if current_time - elapsed_time_after_stage >= 1200:
                 if player.player_stage>=1:

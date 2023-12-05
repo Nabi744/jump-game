@@ -23,6 +23,14 @@ def verbose_keys(keys) -> str:
 
 
 def vec_add(angle1, length1, angle2, length2):
+    """
+    This function adds two vectors and returns the angle and length of the resultant vector.
+    :param angle1:
+    :param length1:
+    :param angle2:
+    :param length2:
+    :return angle, length
+    """
     x = math.sin(angle1) * length1 + math.sin(angle2) * length2
     y = math.cos(angle1) * length1 + math.cos(angle2) * length2
     angle = math.pi/2 - math.atan2(y, x)
@@ -31,18 +39,22 @@ def vec_add(angle1, length1, angle2, length2):
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, screen_width, screen_height):
+        '''
+        initialize player
+        :param screen_width:
+        :param screen_height:
+        '''
         super().__init__()
-        self.size = 50
         original_image = select_image((0,0))
         self.image = pygame.transform.scale(
             original_image,
-            (self.size, self.size),
+            (30, 40),
         )
         self.rect = self.image.get_rect()
         self.rect.x = 51
         self.rect.y = 500
-        self.rect.width = 30 #FIXME
-        self.rect.height = 40 #FIXME
+        self.rect.width = 30
+        self.rect.height = 40
         self.speed = 0
         self.angle = 0
         self.move_speed = 2.4/3.6
@@ -58,9 +70,17 @@ class Player(pygame.sprite.Sprite):
         self.control=False
 
     def update(self,screen_height,grid,vine_group,keys):
-        if self.control:
+        """
+        This updates the player's position and state.
+        :param screen_height:
+        :param grid:
+        :param vine_group:
+        :param keys:
+        :return:
+        """
+        if self.control:#if can move
             self.move_by_key(keys)
-        if not self.control:
+        else:#if not on vine nor collision_down
             self.apply_gravity()
         self.motion()
         self.collision(grid,vine_group)
@@ -83,8 +103,9 @@ class Player(pygame.sprite.Sprite):
             self.control=True
             self.convert_state_to_run()
             self.rect.y=self.collide_vine.rect.y-self.rect.height
-            self.speed=0
-            self.angle=0
+            if self.image_state[0]!=3 and self.image_state[0]!=2:
+                self.speed=0
+                self.angle=0
             return
         #grid collision
         if not grid.movable_left(self):
@@ -103,27 +124,29 @@ class Player(pygame.sprite.Sprite):
         self.rect.y -= self.speed * math.cos(self.angle)
 
     def adjust(self):
+        #collide adjust + collide sound
         if not self.control:
             if self.collide_up:
                 self.angle=math.pi-self.angle
-                self.speed*=0.35
+                # self.speed*=0.35
+                #collide sound
                 p = random.random()
-                if p < 0.15:
+                if p < 0.15:#15% chances of um
                     collide_sound = pygame.mixer.Sound("audio/um.mp3")
-                else:
+                else:#85% chances of oof
                     collide_sound = pygame.mixer.Sound("audio/oof.mp3")
                 collide_sound.play()
             if self.collide_left or self.collide_right:
-                self.speed*=0.7
+                # self.speed*=0.5
                 self.angle*=-1
+                #collide sound
                 p = random.random()
-                if p < 0.15:
+                if p < 0.15:#15% chances of um
                     collide_sound = pygame.mixer.Sound("audio/um.mp3")
-                else:
+                else:#85% chances of oof
                     collide_sound = pygame.mixer.Sound("audio/oof.mp3")
                 collide_sound.play()
         if self.collide_down:
-            #self.angle, self.speed = vec_add(self.angle, self.speed, -math.pi, -0.27)
             self.speed=0
 
     def introduce_new_stage(self, grid: Grid, vine_group: pygame.sprite.Group):
@@ -134,7 +157,7 @@ class Player(pygame.sprite.Sprite):
         self.player_stage += 1
         grid.grid = grid.grid_list[self.player_stage]
         self.lamp.increment()
-        self.rect.y = 600 - self.size
+        self.rect.y = 600 - self.rect.height
 
     def fall_to_previous_stage(self, grid: Grid):
         """
@@ -143,41 +166,56 @@ class Player(pygame.sprite.Sprite):
         self.player_stage -= 1
         grid.grid = grid.grid_list[self.player_stage]
         self.lamp.decrement()
-        self.rect.y = -self.size
+        self.rect.y = -self.rect.height
 
     def check_level(self,screen_height, grid: Grid, vine_group: pygame.sprite.Group):
+        #check fall
         if self.rect.y+self.rect.height>screen_height and math.cos(self.angle)<= 0 and self.player_stage>0:
             self.fall_to_previous_stage(grid=grid)
             return
+        #check next
         if (math.cos(self.angle)>=0 and self.rect.y <= 0 and  self.player_stage<29):
             self.introduce_new_stage(grid=grid, vine_group=vine_group)
             return
+        #check ending
         elif math.cos(self.angle)>=0 and self.rect.y <= 0 and  self.player_stage==29:
             self.player_stage+=1
             return
 
     def move_left(self):
+        """
+        This is for moving left.
+        """
         self.angle=-math.pi/2
         self.speed=self.move_speed
 
     def move_right(self):
+        """
+        This is for moving right.
+        """
         self.angle=math.pi/2
         self.speed=self.move_speed
 
     def jump_left(self):
-        angle=-(1-self.jump_strength/45.5)*math.pi/3
-        speed=(2.4+((self.jump_strength/5)**1.13))*1.4
-        self.angle,self.speed=vec_add(self.angle, self.speed,angle,speed)
+        """
+        This is for jumping left.
+        """
+        self.speed=(self.move_speed**2+(self.jump_strength/9)**2)**0.5
+        self.angle=-(math.atan(self.move_speed/(self.jump_strength/9)))
 
     def jump_right(self):
-        angle=(1-self.jump_strength/45.5)*math.pi/3
-        speed=(2.4+((self.jump_strength/5)**1.13))*1.4
-        self.angle,self.speed=vec_add(self.angle, self.speed,angle,speed)
+        """
+        This is for jumping right.
+        """
+        self.speed=(self.move_speed**2+(self.jump_strength/9)**2)**0.5
+        self.angle=(math.atan(self.move_speed/(self.jump_strength/9)))
 
     def jump_stop(self):
-        angle=0
-        speed=(1.5+((self.jump_strength/5)**1.13))*1.4
-        self.angle,self.speed=vec_add(self.angle, self.speed,angle,speed)
+        """
+        This is for jumping straight up.
+        """
+        self.angle=0
+        self.speed=self.jump_strength/9
 
     def apply_gravity(self):
         """
@@ -195,7 +233,9 @@ class Player(pygame.sprite.Sprite):
         # You cannot handle keys while jumping
         if not self.state.startswith("JUMP"):
             input_result: str = verbose_keys(keys=keys)
+            #Jump stream + image state change
             if input_result.startswith("UP"):
+                #jump direction
                 if keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT]:
                     self.state = "CHARGE_LEFT"
                     self.image_state=(3,0)
@@ -210,7 +250,8 @@ class Player(pygame.sprite.Sprite):
                         self.image_state=(3,1)
                     else:
                         self.image_state=(3,2)
-                self.jump_strength += 1
+                self.jump_strength += 0.4
+                #max jump_strength
                 if self.jump_strength > 30:
                     self.state = "JUMP_" + self.state.split("_")[-1]
                     jump_sound = pygame.mixer.Sound("audio/jump.mp3")
@@ -218,19 +259,19 @@ class Player(pygame.sprite.Sprite):
                     jump_sound.set_volume(0.2)
                     if self.state == "JUMP_LEFT":
                         self.jump_left()
-                        self.jump_strength = 0
                         self.image_state=(2,0)
                         self.state = "STOP"
+                        self.jump_strength = 0
                     elif self.state == "JUMP_RIGHT":
                         self.jump_right()
-                        self.jump_strength = 0
                         self.image_state=(2,1)
                         self.state = "STOP"
+                        self.jump_strength = 0
                     elif self.state == "JUMP_STOP":
                         self.jump_stop()
-                        self.jump_strength = 0
                         self.image_state=(2,2)
                         self.state = "STOP"
+                        self.jump_strength = 0
             elif (input_result == "DEFAULT" or input_result == "CHARGE_"+self.state) and self.state.startswith("CHARGE"):
                 # We need to jump here
                 self.state = "JUMP_" + self.state.split("_")[-1]
@@ -253,13 +294,25 @@ class Player(pygame.sprite.Sprite):
                     self.state = "STOP"
                     self.image_state=(2,2)
             elif input_result == "LEFT":
-                self.state = "RUN_LEFT"
-                self.move_left()
-                self.image_state=(1,0)
+                if self.state.startswith("CHARGE"):
+                    self.jump_left()
+                    self.jump_strength=0
+                    self.state = "STOP"
+                    self.image_state=(2,0)
+                else:
+                    self.state = "RUN_LEFT"
+                    self.move_left()
+                    self.image_state=(1,0)
             elif input_result == "RIGHT":
-                self.state = "RUN_RIGHT"
-                self.move_right()
-                self.image_state = (1,1)
+                if self.state.startswith("CHARGE"):
+                    self.jump_right()
+                    self.jump_strength=0
+                    self.state = "STOP"
+                    self.image_state=(2,1)
+                else:
+                    self.state = "RUN_RIGHT"
+                    self.move_right()
+                    self.image_state = (1,1)
             else:
                 self.state = "STOP"
                 self.image_state = (0, 0)
@@ -267,7 +320,7 @@ class Player(pygame.sprite.Sprite):
         # Update image
         self.image = pygame.transform.scale(
             select_image(self.image_state),
-            (self.size, self.size),
+            (30, 40),
         )
 
 
@@ -286,24 +339,36 @@ class Player(pygame.sprite.Sprite):
 
 class Lamp(pygame.sprite.Sprite):
     def __init__(self, player: Player):
+        """
+        This initializes the lamp.
+        """
         super().__init__()
         self.size = 30
         self.image = get_lamp_by_stage(0, self.size)
         self.rect = self.image.get_rect()
         self.brightness = 0
-        self.rect.x = player.rect.x + 10
-        self.rect.y = player.rect.y + 10
+        self.rect.x = player.rect.x + 5
+        self.rect.y = player.rect.y + 5
 
     def increment(self):
+        """
+        This increments the lamp brightness.
+        """
         if self.brightness < 6:  # Maximum brightness is 6
             self.brightness += 1
         self.image = get_lamp_by_stage(self.brightness, self.size)
 
     def decrement(self):
+        """
+        This decrements the lamp brightness.
+        """
         if self.brightness > 0:
             self.brightness -= 1
         self.image = get_lamp_by_stage(self.brightness, self.size)
 
     def update_lamp_position(self, player: Player):
-        self.rect.x = player.rect.x + 20
-        self.rect.y = player.rect.y + 20
+        """
+        This updates the lamp position.
+        """
+        self.rect.x = player.rect.x + 5
+        self.rect.y = player.rect.y + 5
