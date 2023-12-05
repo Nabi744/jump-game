@@ -27,6 +27,9 @@ def display_leaderboard(screen: pygame.Surface) -> None:
         rendered_text = font.render(text, True, WHITE)
         screen.blit(rendered_text, (50, text_y))
         text_y += 40
+
+    text_enter=font.render("Press Enter to continue", True, WHITE)
+    screen.blit(text_enter, (400, 500))
     
     while True:
         for event in pygame.event.get():

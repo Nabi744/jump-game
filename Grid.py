@@ -30,7 +30,7 @@ class Grid:
         """
         This method creates the grid by reading the appropriate csv file for a map. What file to choose depends on the player stage.
         """
-        if not stage or stage >= 30:
+        if not stage or stage >= 30:#30스테이지 이상은 없음
             stage = 0
         return self.grid_list[stage]
 
@@ -64,9 +64,13 @@ class Grid:
                     end_time = time.time()
                     elapsed_time = end_time - start_time
                     start_time = end_time
-                    print(f"Elapsed time: {elapsed_time} seconds")
 
     def draw_grid(self, screen: pygame.Surface):
+        """
+        This method draws the grid on the screen.
+        :param screen:
+        :return:
+        """
         for grid_row in self.grid:
             for block in grid_row:
                 screen.blit(block.image, block.rect.topleft)
@@ -75,11 +79,12 @@ class Grid:
         """
         This method returns a value whether the player can move left.
         """
+        #모든 Block에 대해
         for grid_row in self.grid:
             for block in grid_row:
+                #Brick만 충돌 판별
                 if block.type=="BRICK":
-                    # print("block:rltb",block.rect.right,block.rect.left,block.rect.top,block.rect.bottom)
-                    # print("player:xywh",player.rect.x,player.rect.y,player.rect.x+player.rect.width,player.rect.y+player.rect.height)
+                    #충돌 감지
                     if (player.rect.x < block.rect.right < player.rect.x+player.rect.width
                         and (block.rect.top<player.rect.y<block.rect.bottom
                              or block.rect.top<player.rect.y+player.rect.height < block.rect.bottom
@@ -90,6 +95,7 @@ class Grid:
                     ):
                         player.rect.x=block.rect.right
                         return False
+        #좌측 끝
         if player.rect.x<0:
             player.rect.x=0
             return False
@@ -99,11 +105,12 @@ class Grid:
         """
         This method returns a value whether the player can move right.
         """
+        #모든 Block에 대해
         for grid_row in self.grid:
             for block in grid_row:
+                #Brick만 충돌 판별
                 if block.type=="BRICK":
-                    # print("block:rltb",block.rect.right,block.rect.left,block.rect.top,block.rect.bottom)
-                    # print("player:xywh",player.rect.x,player.rect.y,player.rect.x+player.rect.width,player.rect.y+player.rect.height)
+                    #충돌 감지
                     if (player.rect.x+player.rect.width> block.rect.left > player.rect.x
                         and (block.rect.top<player.rect.y<block.rect.bottom
                              or block.rect.top<player.rect.y+player.rect.height < block.rect.bottom
@@ -114,6 +121,7 @@ class Grid:
                     ):
                         player.rect.x=block.rect.left-player.rect.width
                         return False
+        #우측 끝
         if player.rect.x+player.rect.width>16*self.block_size:
             player.rect.x=16*self.block_size-player.rect.width
             return False
@@ -123,12 +131,12 @@ class Grid:
         """
         This method returns a value whether the player can move down.
         """
+        #모든 Block에 대해
         for grid_row in self.grid:
             for block in grid_row:
+                #Brick만 충돌 판별
                 if block.type=="BRICK":
-                    # print("운지")
-                    # print("block:rltb",block.rect.right,block.rect.left,block.rect.top,block.rect.bottom)
-                    # print("player:xywh",player.rect.x,player.rect.y,player.rect.x+player.rect.width,player.rect.y+player.rect.height)
+                    #충돌 감지
                     if (player.rect.y < block.rect.top <= player.rect.y+player.rect.height
                         and (block.rect.left<=player.rect.x<=block.rect.right
                              or block.rect.left<player.rect.x+player.rect.width<block.rect.right
@@ -145,11 +153,12 @@ class Grid:
         """
         This method returns a value whether the player can move up.
         """
+        #모든 Block에 대해
         for grid_row in self.grid:
             for block in grid_row:
+                #Brick만 충돌 판별
                 if block.type=="BRICK":
-                    # print("block:rltb",block.rect.right,block.rect.left,block.rect.top,block.rect.bottom)
-                    # print("player:xywh",player.rect.x,player.rect.y,player.rect.x+player.rect.width,player.rect.y+player.rect.height)
+                    #충돌 감지
                     if (player.rect.y+player.rect.height > block.rect.bottom > player.rect.y
                         and (block.rect.left<player.rect.x<block.rect.right
                              or block.rect.left<player.rect.x+player.rect.width < block.rect.right
@@ -160,54 +169,3 @@ class Grid:
                         player.rect.y=block.rect.bottom
                         return False
         return True
-
-    # def movable(self, player:pygame.sprite) -> bool:
-    #     """
-    #     This method returns a value whether the player can move through a certain
-    #     verbose direction.
-    #     """
-    #     for grid_row in self.grid:
-    #         for block in grid_row:
-    #             if block.type=="BRICK" and pygame.sprite.collide_rect(player, block):
-    #                 return False
-    #     return True
-
-        # x=round(x)
-        # y=round(y)
-        # if verbose == "left":
-        #     return (
-        #         self.get_color_of_point(x - speed, y + 1) == EMPTY
-        #         and self.get_color_of_point(x - speed, y + self.block_size - 1) == EMPTY
-        #     )
-        # elif verbose == "right":
-        #     return (
-        #         self.get_color_of_point(x + self.block_size, y + 1) == EMPTY
-        #         and self.get_color_of_point(
-        #             x + self.block_size, y + self.block_size - 1
-        #         )
-        #         == EMPTY
-        #     )
-        # elif verbose == "up":
-        #     if y - speed < 0:
-        #         return True
-        #     return (
-        #         self.get_color_of_point(x + 1, y - speed) == EMPTY
-        #         and self.get_color_of_point(x + self.block_size - 1, y - speed) == EMPTY
-        #     )
-
-    # def get_color_of_point(self, x: int, y: int) -> str:
-    #     """
-    #     This returns the value BRICK or EMPTY, which is the current state of the point in a grid.
-    #     """
-    #     if x < 0 or y < 0 or x > self.grid_size[1] * self.block_size:
-    #         return BRICK
-    #     if y >= self.grid_size[0] * self.block_size:
-    #         return BRICK
-    #     current_grid_row = y // self.block_size
-    #     current_grid_col = x // self.block_size
-    #     if (
-    #         current_grid_row >= self.grid_size[0]
-    #         or current_grid_col >= self.grid_size[1]
-    #     ):
-    #         return BRICK
-    #     return self.grid[current_grid_row][current_grid_col].type
