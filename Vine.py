@@ -2,7 +2,7 @@ import pygame, random
 
 from Player import Player
 
-SCALING = 0.3
+# SCALING = 0.3
 
 class Vine(pygame.sprite.Sprite):
     def __init__(self, x, y):
