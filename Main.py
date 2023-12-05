@@ -1,5 +1,6 @@
 import pygame
 import sys
+import time
 # Initialize Pygame
 pygame.init()
 
@@ -23,10 +24,7 @@ class Game():
         screen_height: int = 600
         screen = pygame.display.set_mode((screen_width, screen_height))
         pygame.display.set_caption("Jack & Ivy")
-
-
-        # Set up font
-        # FIXME: Modify fonts
+        pygame.display.set_icon(pygame.image.load("images/logo.ico"))
 
 
         # FIXME: Fix the audio to desired.
@@ -34,6 +32,15 @@ class Game():
         pygame.mixer.music.set_volume(0.5)
         pygame.mixer.music.play(loops=-1)
 
+        intro_image=pygame.image.load("images/logo.png").convert_alpha()
+        intro_image=pygame.transform.scale(intro_image, (800, 600))
+        for i in range(255,0,-1):
+            screen.fill(BLACK)
+            intro_image.set_alpha(i)
+            screen.blit(intro_image,(0, 0))
+
+            pygame.display.update()
+            time.sleep(0.007)
 
         # Set Username and display leaderboard
         username = input_username(screen=screen)
