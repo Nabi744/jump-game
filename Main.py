@@ -40,7 +40,7 @@ class Game():
             screen.blit(intro_image,(0, 0))
 
             pygame.display.update()
-            time.sleep(0.01)
+            time.sleep(0.007)
 
         # Set Username and display leaderboard
         username = input_username(screen=screen)
