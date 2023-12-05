@@ -177,11 +177,11 @@ class Player(pygame.sprite.Sprite):
             self.fall_to_previous_stage(grid=grid)
             return
         #check next
-        if (math.cos(self.angle)>=0 and self.rect.y <= 0 and  self.player_stage<29):
+        if (math.cos(self.angle)>=0 and self.rect.y <= 0 and  self.player_stage<19):
             self.introduce_new_stage(grid=grid, vine_group=vine_group)
             return
         #check ending
-        elif math.cos(self.angle)>=0 and self.rect.y <= 0 and  self.player_stage==29:
+        elif math.cos(self.angle)>=0 and self.rect.y <= 0 and  self.player_stage==19:
             self.player_stage+=1
             return
 

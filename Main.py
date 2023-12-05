@@ -67,7 +67,7 @@ class Game():
             block_size=block_size,
             stage=user.points // 100 if user.points > 0 else 0,
         )
-        if player.player_stage!=30:
+        if player.player_stage!=20:
             vine_group = background.vine_group_list[player.player_stage]
         else:
             game_over(screen,username=username)
@@ -119,7 +119,7 @@ class Game():
 
             # Move player
             player.update(screen_height, grid=background, vine_group=vine_group, keys=keys)
-            if player.player_stage == 30:
+            if player.player_stage == 20:
                 game_over(screen, username)
 
             # Increment hope gauge
