@@ -3,6 +3,9 @@ import pygame
 
 class Block(pygame.sprite.Sprite):
     def __init__(self, type: str, image: pygame.Surface, row: int, col: int):
+        """
+        This class represents the blocks in the game.
+        """
         super().__init__()
         self.type = type
         self.size = 50
